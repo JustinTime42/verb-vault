@@ -13,7 +13,7 @@ import { VerbEditor } from '@/components/theme/VerbEditor'
 import { SpinnerPreview } from '@/components/spinner/SpinnerPreview'
 import { GenerateModal } from '@/components/ai/GenerateModal'
 import { createClient } from '@/lib/supabase/client'
-import { THEME_TAGS, GRADIENT_PRESETS, type ThemeWithAuthor, type ThemeTag } from '@verbvault/shared'
+import { THEME_TAGS, type ThemeWithAuthor, type ThemeTag } from '@verbvault/shared'
 import { updateThemeSchema } from '@verbvault/shared'
 import { toast } from 'sonner'
 
@@ -34,8 +34,6 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
   const [description, setDescription] = useState(theme.description || '')
   const [verbs, setVerbs] = useState<string[]>(theme.verbs)
   const [tags, setTags] = useState<ThemeTag[]>((theme.tags as ThemeTag[]) || [])
-  const [coverColor, setCoverColor] = useState(theme.cover_color)
-
   const wasPublished = theme.is_published
 
   const toggleTag = (tag: ThemeTag) => {
@@ -59,7 +57,6 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
       description: description || null,
       verbs,
       tags,
-      cover_color: coverColor,
       is_published: publish,
     })
 
@@ -85,7 +82,6 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
         description: description || null,
         verbs,
         tags,
-        cover_color: coverColor,
         is_published: publish,
         updated_at: new Date().toISOString(),
       }
@@ -253,26 +249,6 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
             </div>
           </Card>
 
-          {/* Cover Color */}
-          <Card className="p-6 space-y-4">
-            <h2 className="font-semibold">Cover Color</h2>
-            <div className="grid grid-cols-4 gap-2">
-              {GRADIENT_PRESETS.map((preset) => (
-                <button
-                  key={preset.name}
-                  type="button"
-                  onClick={() => setCoverColor(preset.value)}
-                  className={`h-12 rounded-lg transition-all ${
-                    coverColor === preset.value
-                      ? 'ring-2 ring-primary ring-offset-2'
-                      : 'hover:scale-105'
-                  }`}
-                  style={{ background: preset.value }}
-                  title={preset.name}
-                />
-              ))}
-            </div>
-          </Card>
         </div>
 
         {/* Preview Sidebar */}
@@ -285,10 +261,7 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
 
             {/* Preview Card */}
             <div className="border rounded-xl overflow-hidden mb-6">
-              <div
-                className="h-24 flex items-center justify-center"
-                style={{ background: coverColor }}
-              >
+              <div className="h-24 flex items-center justify-center bg-gradient-warm">
                 {verbs.length > 0 ? (
                   <SpinnerPreview
                     verbs={verbs}

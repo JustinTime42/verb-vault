@@ -28,7 +28,7 @@ export async function installCommand(themeSlug: string, options: InstallOptions)
     const settings = await readClaudeSettings()
 
     // Check if verbs already exist
-    const hasExistingVerbs = settings.spinner?.verbs && settings.spinner.verbs.length > 0
+    const hasExistingVerbs = settings.spinnerVerbs?.verbs && settings.spinnerVerbs.verbs.length > 0
 
     if (hasExistingVerbs && !options.force) {
       spinner.warn(chalk.yellow('Existing verbs found'))
@@ -43,8 +43,9 @@ export async function installCommand(themeSlug: string, options: InstallOptions)
     spinner.text = 'Installing theme...'
 
     // Update settings
-    settings.spinner = settings.spinner || {}
-    settings.spinner.verbs = theme.verbs
+    settings.spinnerVerbs = settings.spinnerVerbs || {}
+    settings.spinnerVerbs.mode = 'replace'
+    settings.spinnerVerbs.verbs = theme.verbs
 
     // Track installed theme metadata
     settings._verbvault = settings._verbvault || { installedThemes: [] }

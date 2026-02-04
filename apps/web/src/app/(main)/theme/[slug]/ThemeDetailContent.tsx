@@ -12,7 +12,6 @@ import {
   GitFork,
   Copy,
   Check,
-  Terminal,
   ChevronDown,
   ChevronUp,
   Pencil,
@@ -46,7 +45,7 @@ export function ThemeDetailContent({
   const [isLiked, setIsLiked] = useState(theme.is_liked || false)
   const [likeCount, setLikeCount] = useState(theme.like_count || 0)
   const [showAllVerbs, setShowAllVerbs] = useState(false)
-  const [copied, setCopied] = useState<'json' | 'cli' | null>(null)
+  const [copied, setCopied] = useState<'json' | null>(null)
   const [comments, setComments] = useState(initialComments)
   const [newComment, setNewComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -74,7 +73,8 @@ export function ThemeDetailContent({
 
   const handleCopyJSON = async () => {
     const jsonConfig = {
-      spinner: {
+      spinnerVerbs: {
+        mode: 'replace',
         verbs: theme.verbs,
       },
     }
@@ -86,13 +86,6 @@ export function ThemeDetailContent({
     // Track download
     const supabase = createClient()
     await supabase.rpc('increment_download_count', { theme_id: theme.id })
-  }
-
-  const handleCopyCLI = async () => {
-    await copyToClipboard(`npx verbvault install ${theme.slug}`)
-    setCopied('cli')
-    toast.success('CLI command copied!')
-    setTimeout(() => setCopied(null), 2000)
   }
 
   const handleFork = async () => {
@@ -220,10 +213,7 @@ export function ThemeDetailContent({
           {/* Spinner Preview */}
           <Card className="p-6">
             <h2 className="font-semibold mb-4">Live Preview</h2>
-            <div
-              className="rounded-xl p-8 flex items-center justify-center"
-              style={{ background: theme.cover_color }}
-            >
+            <div className="rounded-xl p-8 flex items-center justify-center bg-gradient-warm">
               <SpinnerPreview verbs={theme.verbs} size="lg" className="text-white" />
             </div>
           </Card>
@@ -336,61 +326,26 @@ export function ThemeDetailContent({
         <div className="space-y-6">
           {/* Install Card */}
           <Card className="p-6 sticky top-24">
-            <h2 className="font-semibold mb-4">Install this theme</h2>
-
-            <div className="space-y-4">
-              {/* CLI Method */}
-              <div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                  <Terminal className="h-4 w-4" />
-                  <span>CLI (recommended)</span>
-                </div>
-                <div className="relative">
-                  <pre className="bg-muted p-3 rounded-lg text-sm font-mono overflow-x-auto">
-                    npx verbvault install {theme.slug}
-                  </pre>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7"
-                    onClick={handleCopyCLI}
-                  >
-                    {copied === 'cli' ? (
-                      <Check className="h-4 w-4 text-green-500" />
-                    ) : (
-                      <Copy className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              {/* JSON Method */}
-              <div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                  <span>Manual (copy JSON)</span>
-                </div>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleCopyJSON}
-                >
-                  {copied === 'json' ? (
-                    <>
-                      <Check className="h-4 w-4 mr-2 text-green-500" />
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy JSON Config
-                    </>
-                  )}
-                </Button>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Paste into <code>~/.claude/settings.json</code>
-                </p>
-              </div>
-            </div>
+            <h2 className="font-semibold mb-4">Add to Claude Code</h2>
+            <Button
+              className="w-full"
+              onClick={handleCopyJSON}
+            >
+              {copied === 'json' ? (
+                <>
+                  <Check className="h-4 w-4 mr-2 text-green-500" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4 mr-2" />
+                  Copy JSON Config
+                </>
+              )}
+            </Button>
+            <p className="text-xs text-muted-foreground mt-2">
+              Paste into <code>~/.claude/settings.json</code>
+            </p>
 
             {/* Stats */}
             <div className="flex items-center justify-around mt-6 pt-6 border-t">

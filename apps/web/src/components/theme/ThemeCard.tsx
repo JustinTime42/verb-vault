@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -20,7 +21,11 @@ interface ThemeCardProps {
 
 export function ThemeCard({ theme, index = 0, currentUserId, showDraftBadge }: ThemeCardProps) {
   const router = useRouter()
-  const previewVerbs = getRandomVerbs(theme.verbs, 5)
+  const [previewVerbs, setPreviewVerbs] = useState(() => theme.verbs.slice(0, 5))
+
+  useEffect(() => {
+    setPreviewVerbs(getRandomVerbs(theme.verbs, 5))
+  }, [theme.verbs])
   const canEdit = currentUserId && theme.author_id === currentUserId
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -39,9 +44,8 @@ export function ThemeCard({ theme, index = 0, currentUserId, showDraftBadge }: T
         <Card className="group relative overflow-hidden card-hover cursor-pointer h-full">
           {/* Gradient border effect */}
           <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl bg-gradient-warm"
             style={{
-              background: theme.cover_color,
               padding: '2px',
               mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
               maskComposite: 'exclude',
@@ -49,10 +53,7 @@ export function ThemeCard({ theme, index = 0, currentUserId, showDraftBadge }: T
           />
 
           {/* Cover gradient */}
-          <div
-            className="h-24 relative"
-            style={{ background: theme.cover_color }}
-          >
+          <div className="h-24 relative bg-gradient-warm">
             <div className="absolute inset-0 bg-black/20" />
             <div className="absolute inset-0 flex items-center justify-center">
               <SpinnerPreview

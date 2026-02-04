@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
 import { Save, Eye, Sparkles, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,7 +14,7 @@ import { SpinnerPreview } from '@/components/spinner/SpinnerPreview'
 import { GenerateModal } from '@/components/ai/GenerateModal'
 import { createClient } from '@/lib/supabase/client'
 import { generateSlug } from '@/lib/utils'
-import { THEME_TAGS, GRADIENT_PRESETS, type Theme, type ThemeTag } from '@verbvault/shared'
+import { THEME_TAGS, type Theme, type ThemeTag } from '@verbvault/shared'
 import { createThemeSchema } from '@verbvault/shared'
 import { toast } from 'sonner'
 
@@ -33,9 +32,6 @@ export function CreateThemeContent({ forkTheme }: CreateThemeContentProps) {
   const [description, setDescription] = useState(forkTheme?.description || '')
   const [verbs, setVerbs] = useState<string[]>(forkTheme?.verbs || [])
   const [tags, setTags] = useState<ThemeTag[]>((forkTheme?.tags as ThemeTag[]) || [])
-  const [coverColor, setCoverColor] = useState(
-    forkTheme?.cover_color || GRADIENT_PRESETS[0].value
-  )
 
   const toggleTag = (tag: ThemeTag) => {
     if (tags.includes(tag)) {
@@ -60,7 +56,6 @@ export function CreateThemeContent({ forkTheme }: CreateThemeContentProps) {
       description: description || undefined,
       verbs,
       tags,
-      cover_color: coverColor,
     })
 
     if (!result.success) {
@@ -89,7 +84,7 @@ export function CreateThemeContent({ forkTheme }: CreateThemeContentProps) {
         description: description || null,
         verbs,
         tags,
-        cover_color: coverColor,
+        cover_color: 'linear-gradient(135deg, #D97757 0%, #FFB000 100%)',
         is_published: publish,
         forked_from: forkTheme?.id || null,
         published_at: publish ? new Date().toISOString() : null,
@@ -226,26 +221,6 @@ export function CreateThemeContent({ forkTheme }: CreateThemeContentProps) {
             </div>
           </Card>
 
-          {/* Cover Color */}
-          <Card className="p-6 space-y-4">
-            <h2 className="font-semibold">Cover Color</h2>
-            <div className="grid grid-cols-4 gap-2">
-              {GRADIENT_PRESETS.map((preset) => (
-                <button
-                  key={preset.name}
-                  type="button"
-                  onClick={() => setCoverColor(preset.value)}
-                  className={`h-12 rounded-lg transition-all ${
-                    coverColor === preset.value
-                      ? 'ring-2 ring-primary ring-offset-2'
-                      : 'hover:scale-105'
-                  }`}
-                  style={{ background: preset.value }}
-                  title={preset.name}
-                />
-              ))}
-            </div>
-          </Card>
         </div>
 
         {/* Preview Sidebar */}
@@ -258,10 +233,7 @@ export function CreateThemeContent({ forkTheme }: CreateThemeContentProps) {
 
             {/* Preview Card */}
             <div className="border rounded-xl overflow-hidden mb-6">
-              <div
-                className="h-24 flex items-center justify-center"
-                style={{ background: coverColor }}
-              >
+              <div className="h-24 flex items-center justify-center bg-gradient-warm">
                 {verbs.length > 0 ? (
                   <SpinnerPreview
                     verbs={verbs}

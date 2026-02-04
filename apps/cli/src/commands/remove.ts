@@ -27,10 +27,7 @@ export async function removeCommand(themeSlug: string) {
 
     // Clear verbs if this was the only/current theme
     if (installedThemes.length === 0) {
-      delete settings.spinner?.verbs
-      if (settings.spinner && Object.keys(settings.spinner).length === 0) {
-        delete settings.spinner
-      }
+      delete settings.spinnerVerbs
     }
 
     await writeClaudeSettings(settings)

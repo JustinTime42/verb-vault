@@ -4,5 +4,33 @@
       "Bash(npx tsc:*)",
       "WebSearch"
     ]
+  },
+ {
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Warp speeding",
+      "Hyperdriving",
+      "Engaging the deflector shields",
+      "Energizing the phasers",
+      "To infinity and beyond-ing",
+      "Initiating jump to lightspeed",
+      "Searching for extraterrestrial life",
+      "Taking the blue pill",
+      "Transmitting coordinates",
+      "Bending space-time",
+      "Finding your way through the wormhole",
+      "Riding the TARDIS",
+      "Scanning for life signs",
+      "Decoding alien messages",
+      "Landing on the Death Star",
+      "Exploring strange new worlds",
+      "Assembling the Avengers",
+      "Evolving into a new species",
+      "Navigating the asteroid field",
+      "Summoning the Force"
+    ]
   }
 }
+}
+  

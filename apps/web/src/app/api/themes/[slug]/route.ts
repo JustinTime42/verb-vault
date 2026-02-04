@@ -39,7 +39,7 @@ export async function GET(
     }
 
     // Increment download count (fire and forget)
-    supabase.rpc('increment_download_count', { theme_id: theme.id }).catch(() => {})
+    supabase.rpc('increment_download_count', { theme_id: theme.id }).then(() => {}, () => {})
 
     return NextResponse.json(theme)
   } catch (error) {

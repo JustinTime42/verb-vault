@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ProfileContent } from './ProfileContent'
 import type { Metadata } from 'next'
+import type { ThemeWithAuthor, Achievement } from '@verbvault/shared'
 
 interface Props {
   params: Promise<{ username: string }>
@@ -133,7 +134,7 @@ async function getUserLikedThemes(userId: string) {
     .order('created_at', { ascending: false })
     .limit(20)
 
-  return likes?.map(l => l.theme).filter(Boolean) || []
+  return (likes?.map(l => l.theme).filter(Boolean) || []) as unknown as ThemeWithAuthor[]
 }
 
 async function getUserAchievements(userId: string) {
@@ -148,7 +149,7 @@ async function getUserAchievements(userId: string) {
     .eq('user_id', userId)
     .order('earned_at', { ascending: false })
 
-  return data || []
+  return (data || []) as unknown as { earned_at: string; achievement: Achievement }[]
 }
 
 export default async function ProfilePage({ params }: Props) {
