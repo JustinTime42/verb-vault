@@ -1,0 +1,42 @@
+{
+  "name": "verbvault",
+  "version": "0.1.0",
+  "description": "CLI tool for installing VerbVault themes into Claude Code",
+  "main": "./dist/index.js",
+  "bin": {
+    "verbvault": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format esm --dts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "spinner",
+    "verbs",
+    "themes",
+    "cli"
+  ],
+  "author": "VerbVault",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "ora": "^8.0.1",
+    "@verbvault/shared": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

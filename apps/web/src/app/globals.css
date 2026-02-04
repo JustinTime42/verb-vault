@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm coral palette - light mode */
+    --background: 30 25% 98%;
+    --foreground: 20 12% 10%;
+    --card: 30 20% 99%;
+    --card-foreground: 20 12% 10%;
+    --popover: 30 20% 99%;
+    --popover-foreground: 20 12% 10%;
+    --primary: 15 65% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 15% 93%;
+    --secondary-foreground: 20 12% 15%;
+    --muted: 25 15% 93%;
+    --muted-foreground: 20 8% 45%;
+    --accent: 40 100% 50%;
+    --accent-foreground: 20 12% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 25 15% 88%;
+    --input: 25 15% 88%;
+    --ring: 15 65% 60%;
+    --radius: 0.75rem;
+
+    /* Terminal colors */
+    --terminal-green: 110 100% 55%;
+    --terminal-amber: 40 100% 50%;
+    --terminal-bg: 20 15% 7%;
+  }
+
+  .dark {
+    /* Warm palette - dark mode (warmer tones, not pure gray) */
+    --background: 20 15% 7%;
+    --foreground: 25 15% 95%;
+    --card: 20 12% 10%;
+    --card-foreground: 25 15% 95%;
+    --popover: 20 12% 10%;
+    --popover-foreground: 25 15% 95%;
+    --primary: 15 70% 63%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 20 10% 18%;
+    --secondary-foreground: 25 15% 95%;
+    --muted: 20 10% 18%;
+    --muted-foreground: 25 10% 55%;
+    --accent: 40 100% 50%;
+    --accent-foreground: 20 12% 10%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 20 10% 18%;
+    --input: 20 10% 18%;
+    --ring: 15 70% 63%;
+
+    /* Terminal colors - dark mode */
+    --terminal-green: 110 100% 55%;
+    --terminal-amber: 40 100% 50%;
+    --terminal-bg: 20 15% 5%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Gradient text - now coral to amber */
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  /* Terminal text colors */
+  .text-terminal-green {
+    color: hsl(var(--terminal-green));
+  }
+
+  .text-terminal-amber {
+    color: hsl(var(--terminal-amber));
+  }
+
+  /* Gradient border */
+  .gradient-border {
+    @apply relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg p-[2px];
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .spinner-verb {
+    @apply font-mono text-lg font-semibold tracking-tight;
+  }
+
+  /* Terminal glow effects */
+  .terminal-glow {
+    text-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+  }
+
+  .terminal-glow-sm {
+    text-shadow: 0 0 4px currentColor;
+  }
+
+  /* Terminal scanlines effect */
+  .terminal-scanlines {
+    @apply relative overflow-hidden;
+  }
+
+  .terminal-scanlines::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.1) 2px,
+      rgba(0, 0, 0, 0.1) 4px
+    );
+  }
+
+  /* CRT screen effect */
+  .crt-effect {
+    @apply relative;
+    animation: crt-flicker 0.15s infinite;
+  }
+
+  .crt-effect::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+  }
+}
+
+/* Custom scrollbar - warm tones */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+}
+
+/* Focus styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .terminal-glow,
+  .terminal-glow-sm {
+    text-shadow: none;
+  }
+
+  .terminal-scanlines::after {
+    display: none;
+  }
+}
