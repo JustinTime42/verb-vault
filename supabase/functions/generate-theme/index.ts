@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     }
 
     // Parse request body
-    const { prompt, count = 15 } = await req.json()
+    const { prompt, count = 50 } = await req.json()
 
     if (!prompt || typeof prompt !== 'string' || prompt.length < 5) {
       return new Response(
@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
         ],
         response_format: { type: 'json_object' },
         temperature: 0.8,
-        max_tokens: 1000,
+        max_tokens: 3000,
       }),
     })
 

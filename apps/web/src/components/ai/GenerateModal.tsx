@@ -51,7 +51,7 @@ export function GenerateModal({
       const response = await fetch('/api/ai/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt.trim(), count: 20 }),
+        body: JSON.stringify({ prompt: prompt.trim(), count: 50 }),
       })
 
       if (!response.ok) {

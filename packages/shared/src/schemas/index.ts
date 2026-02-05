@@ -127,12 +127,12 @@ export const generateThemeSchema = z.object({
     .string()
     .min(5, 'Prompt must be at least 5 characters')
     .max(500, 'Prompt must be at most 500 characters'),
-  count: z.number().int().min(5).max(50).default(15),
+  count: z.number().int().min(5).max(100).default(50),
 })
 
 export const suggestVerbsSchema = z.object({
-  existingVerbs: z.array(z.string()).min(1).max(100),
-  count: z.number().int().min(1).max(20).default(5),
+  existingVerbs: z.array(z.string()).min(1).max(200),
+  count: z.number().int().min(1).max(100).default(50),
   style: z.string().max(100).optional(),
 })
 

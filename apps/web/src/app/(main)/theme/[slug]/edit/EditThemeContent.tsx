@@ -25,6 +25,7 @@ interface EditThemeContentProps {
 export function EditThemeContent({ theme, currentVersion }: EditThemeContentProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSuggesting, setIsSuggesting] = useState(false)
   const [showGenerateModal, setShowGenerateModal] = useState(false)
   const [showChangelogInput, setShowChangelogInput] = useState(false)
   const [changelog, setChangelog] = useState('')
@@ -169,6 +170,43 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
     setShowGenerateModal(false)
   }
 
+  const handleSuggestMore = async () => {
+    if (verbs.length === 0) {
+      toast.error('Add some verbs first to get suggestions')
+      return
+    }
+
+    setIsSuggesting(true)
+
+    try {
+      const response = await fetch('/api/ai/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ existingVerbs: verbs, count: 50 }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to suggest verbs')
+      }
+
+      const data = await response.json()
+
+      // Merge and dedupe
+      const newVerbs = [...verbs, ...data.suggestions]
+      const unique = Array.from(new Set(newVerbs)).slice(0, 200) // respect 200 limit
+      setVerbs(unique)
+
+      const added = unique.length - verbs.length
+      toast.success(`Added ${added} new verbs`)
+    } catch (error) {
+      console.error('Error suggesting verbs:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to suggest verbs')
+    } finally {
+      setIsSuggesting(false)
+    }
+  }
+
   const canPublish = name.trim() && verbs.length > 0
 
   return (
@@ -221,9 +259,8 @@ export function EditThemeContent({ theme, currentVersion }: EditThemeContentProp
               verbs={verbs}
               onChange={setVerbs}
               onGenerateClick={() => setShowGenerateModal(true)}
-              onSuggestClick={() => {
-                toast.info('Coming soon!')
-              }}
+              onSuggestClick={handleSuggestMore}
+              isSuggesting={isSuggesting}
             />
           </Card>
 

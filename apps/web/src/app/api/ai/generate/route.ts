@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { prompt, count = 15 } = result.data
+    const { prompt, count = 50 } = result.data
 
     // Check for OpenAI API key
     const apiKey = process.env.OPENAI_API_KEY
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         ],
         response_format: { type: 'json_object' },
         temperature: 0.8,
-        max_tokens: 1000,
+        max_tokens: 3000,
       }),
     })
 

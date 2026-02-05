@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
-import { Plus, X, GripVertical, Sparkles, RefreshCw } from 'lucide-react'
+import { Plus, X, GripVertical, Sparkles, RefreshCw, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -12,6 +12,7 @@ interface VerbEditorProps {
   onChange: (verbs: string[]) => void
   onGenerateClick?: () => void
   onSuggestClick?: () => void
+  isSuggesting?: boolean
   maxVerbs?: number
   className?: string
 }
@@ -21,6 +22,7 @@ export function VerbEditor({
   onChange,
   onGenerateClick,
   onSuggestClick,
+  isSuggesting = false,
   maxVerbs = 200,
   className,
 }: VerbEditorProps) {
@@ -59,10 +61,15 @@ export function VerbEditor({
               variant="outline"
               size="sm"
               onClick={onSuggestClick}
+              disabled={isSuggesting}
               className="text-xs"
             >
-              <RefreshCw className="h-3 w-3 mr-1" />
-              Suggest More
+              {isSuggesting ? (
+                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+              ) : (
+                <RefreshCw className="h-3 w-3 mr-1" />
+              )}
+              {isSuggesting ? 'Suggesting...' : 'Suggest More'}
             </Button>
           )}
           {onGenerateClick && (
